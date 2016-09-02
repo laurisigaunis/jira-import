@@ -4,16 +4,13 @@ from jira import JIRA
 from pprint import pprint
 import getpass, json
 
-
-### Initialize JIRA connection
-
 # Set variables
 username = raw_input('Username: ')
 password = getpass.getpass("Password: ")
 url = 'https://jira.atlassian.net'
 projectID = raw_input('Project ID to import data in: ')
 
-# Initialize JIRA
+# Initialize JIRA connection
 jira = JIRA(url, basic_auth=(username, password))
 
 # Import the JSON file with issue data.

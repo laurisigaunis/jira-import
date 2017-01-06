@@ -33,7 +33,7 @@ function get_node_comments_recursive($nid, $pid = 0) {
     $c->subject = $row->subject;
     $c->comment = $row->comment;
     $c->hostname = $row->hostname;
-    $c->timestamp = date(EXPORT_DATE_FORMAT, $row->timestamp);
+    $c->timestamp = date('D\, jS F Y H:i:s', $row->timestamp);
     $c->status = $row->status;
     $c->thread = $row->thread;
     $c->user_name = $row->name;
@@ -85,14 +85,14 @@ foreach ($nodes as $nid => $node) {
   $n = new StdClass();
 
   // basic properties
-  $n->project = 3300;
+  $n->project = $project_id;
   $n->nid = $node->nid;
   $n->type = $node->type;
   $n->uid = $node->uid;
   $n->user_name = $node->name;
   $n->status = $node->status;
-  $n->created = date(EXPORT_DATE_FORMAT, $node->created);
-  $n->changed = date(EXPORT_DATE_FORMAT, $node->changed);
+  $n->created = date('D\, jS F Y H:i:s', $node->created);
+  $n->changed = date('D\, j F Y H:i:s', $node->changed);
   $n->title = $node->title;
   $n->body = $node->body;
 
@@ -103,12 +103,12 @@ foreach ($nodes as $nid => $node) {
 
   $data->nodes->$nid = $n;
 
-  // if ($i > 3) {
-  //   break;
-  // }
-  // else {
-  //   $i++;
-  // }
+/*   if ($i > 3) {
+     break;
+   }
+   else {
+     $i++;
+   }*/
 }
 
 echo "Creating and exporting JSON... \r\n";

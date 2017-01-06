@@ -26,7 +26,7 @@ for nkey, node in data['nodes'].iteritems():
 
     # Create a new issue
     issue_dict = {
-        'project': {'id': projectID},
+        'project': {'key': projectID},
         'summary': node['title'],
         'description': node['body'],
         'issuetype': {'name': 'IT Help'},
@@ -38,8 +38,8 @@ for nkey, node in data['nodes'].iteritems():
     print 'Adding comments...'
     for ckey, comment in node['comments'].iteritems():
         # Comment metadata available here
-        # print comment['comment']
+        comment_text = 'On %s %s said:\n %s' % (comment['timestamp'], comment['user_name'], comment['comment'])
 
         # Add a new comment
-        comment = jira.add_comment(issue, comment['comment'])
+        comment = jira.add_comment(issue, comment_text)
 

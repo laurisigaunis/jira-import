@@ -129,9 +129,8 @@ foreach ($nodes as $nid => $node) {
       $jira_transition_id = '31';
       break;
   }
-  if($jira_transition_id != '51'){
-    continue;
-  }
+  // Export only specific statuse cases
+  if($jira_transition_id != '51'){ continue; }
 
   $n = new StdClass();
 

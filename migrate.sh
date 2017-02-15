@@ -17,13 +17,11 @@ jira = JIRA(url, basic_auth=(username, password))
 # Import the JSON file with issue data.
 with open('cases.json') as json_data:
     data = json.load(json_data, object_pairs_hook=OrderedDict)
-    # print(data['1'])
 
 # Loop the JSON data array
 print 'Creating issues...'
 for nkey, node in data['nodes'].iteritems():
     # Node metadata available here
-    # print node['title']
 
     # Create a new issue
     issue_dict = {
@@ -41,7 +39,6 @@ for nkey, node in data['nodes'].iteritems():
         for ckey, comment in node['comments'].iteritems():
             # Comment metadata available here
             comment_text = 'On %s %s said:\n %s' % (comment['timestamp'], comment['user_name'], comment['comment'])
-            print 'comment id  '+ ckey
 
             # Add a new comment
             comment = jira.add_comment(issue, comment_text)

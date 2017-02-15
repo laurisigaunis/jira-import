@@ -82,6 +82,57 @@ $data->nodes = new StdClass();
 
 foreach ($nodes as $nid => $node) {
 
+  $case_status = db_query('Select case_status_id from casetracker_case where nid = '. $node->nid);
+  $case_status_id = db_fetch_object($case_status)->case_status_id;
+
+  // See Jira transition ids  - https://domain.atlassian.net/rest/api/2/issue/ISSUE-99/transitions
+  // For each project these id's can be different
+  switch ($case_status_id) {
+    case 4://Open in extra
+      $ticket_status = 'Open'; //readable name for yourself
+      $jira_transition_id = '51'; //will be used directly in migration process
+      break;
+    case 6://Pending customer in extra
+      $ticket_status = 'Waiting for customer';
+      $jira_transition_id = '61';
+      break;
+    case 5: //Resolved in extra
+      $ticket_status = 'Resolved';
+      $jira_transition_id = '31';
+      break;
+    case 7://Duplicate in extra
+      $ticket_status = 'Closed';
+      $jira_transition_id = '31';
+      break;
+    case 8://Closed in extra
+      $ticket_status = 'Closed';
+      $jira_transition_id = '31';
+      break;
+    case 12://Pending other in extra
+      $ticket_status = 'Open';
+      $jira_transition_id = '131';
+      break;
+    case 13://In Progress other in extra
+      $ticket_status = 'In progress';
+      $jira_transition_id = '81';
+      break;
+    case 14://Accepted in extra
+      $ticket_status = 'Closed';
+      $jira_transition_id = '31';
+      break;
+    case 15://Rejected in extra
+      $ticket_status = 'Open';
+      $jira_transition_id = '131';
+      break;
+    default:
+      $ticket_status = 'Closed';
+      $jira_transition_id = '31';
+      break;
+  }
+  if($jira_transition_id != '51'){
+    continue;
+  }
+
   $n = new StdClass();
 
   // basic properties
@@ -90,7 +141,8 @@ foreach ($nodes as $nid => $node) {
   $n->type = $node->type;
   $n->uid = $node->uid;
   $n->user_name = $node->name;
-  $n->status = $node->status;
+  $n->status = $ticket_status;
+  $n->jira_transition_id = $jira_transition_id;
   $n->created = date('D\, jS F Y H:i:s', $node->created);
   $n->changed = date('D\, j F Y H:i:s', $node->changed);
   $n->title = $node->title;
